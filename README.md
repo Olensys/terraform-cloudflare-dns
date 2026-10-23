@@ -1,6 +1,6 @@
-# __NAME__
+# terraform-cloudflare-dns
 
-__DESCRIPTION__
+Cloudflare DNS records from a map; used for ACM and SES validation and CNAMEs
 
 ## Opinions
 
@@ -10,7 +10,7 @@ __DESCRIPTION__
 
 ```hcl
 module "this" {
-  source = "git::https://github.com/Olensys/__NAME__.git?ref=v1.0.0"
+  source = "git::https://github.com/Olensys/terraform-cloudflare-dns.git?ref=v1.0.0"
 
   name = "example"
   context = {
