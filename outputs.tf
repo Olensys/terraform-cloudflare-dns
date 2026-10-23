@@ -1,20 +1,21 @@
+# No arn/self_link output: Cloudflare records have no ARN or self link, and are not taggable.
+
 output "id" {
-  description = "Identifier of the primary resource. Null when create is false."
-  value       = var.create ? var.name : null
+  description = "ID of the zone the records belong to (var.zone_id). Null when create is false."
+  value       = var.create ? var.zone_id : null
 }
 
 output "name" {
-  description = "Name of the primary resource. Null when create is false."
-  value       = var.create ? var.name : null
+  description = "The zone the records belong to (var.zone_id); this module is a record set, not a named resource. Null when create is false."
+  value       = var.create ? var.zone_id : null
 }
 
-# GCP modules replace this output with `self_link`. Replace `null` with the resource's ARN.
-output "arn" {
-  description = "ARN of the primary resource. Null when create is false."
-  value       = null
+output "record_ids" {
+  description = "Map of record key to Cloudflare record ID."
+  value       = { for k, r in cloudflare_dns_record.this : k => r.id }
 }
 
-output "tags" {
-  description = "Tags applied to every taggable resource, with context.extra_tags merged in. Null when create is false."
-  value       = var.create ? local.tags : null
+output "fqdns" {
+  description = "Map of record key to record name (trailing dot stripped)."
+  value       = { for k, r in cloudflare_dns_record.this : k => r.name }
 }

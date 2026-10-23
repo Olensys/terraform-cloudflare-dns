@@ -1,12 +1,5 @@
-variable "name" {
-  description = "Resource name. Lowercase letters, digits and hyphens."
-  type        = string
-  validation {
-    condition     = can(regex("^[a-z0-9-]{1,63}$", var.name))
-    error_message = "name must match ^[a-z0-9-]{1,63}$."
-  }
-}
-
+# Part of the module interface contract; records carry no tags or names derived from it.
+# tflint-ignore: terraform_unused_declarations
 variable "context" {
   description = "Deployment context used for naming, tagging and environment-dependent defaults."
   type = object({
@@ -30,9 +23,35 @@ variable "create" {
   default     = true
 }
 
-# GCP modules rename this variable to `labels` and add `project_id` after `context`.
-variable "tags" {
-  description = "Tags merged onto every taggable resource, applied last."
-  type        = map(string)
-  default     = {}
+variable "zone_id" {
+  description = "Cloudflare zone ID the records are created in."
+  type        = string
+}
+
+variable "records" {
+  description = <<-EOT
+    DNS records keyed by a caller-chosen stable key. A trailing dot on name and content is stripped.
+    ttl is 1 (automatic) or 60-86400 seconds. MX/SRV priority is not supported in v1.
+  EOT
+  type = map(object({
+    name    = string
+    type    = string
+    content = string
+    ttl     = optional(number, 300)
+    proxied = optional(bool, false)
+    comment = optional(string)
+  }))
+  default = {}
+
+  validation {
+    condition = alltrue([
+      for r in values(var.records) : contains(["A", "AAAA", "CNAME", "TXT", "MX", "NS", "SRV", "CAA", "PTR"], r.type)
+    ])
+    error_message = "Each record type must be one of A, AAAA, CNAME, TXT, MX, NS, SRV, CAA, PTR."
+  }
+
+  validation {
+    condition     = alltrue([for r in values(var.records) : r.ttl == 1 || (r.ttl >= 60 && r.ttl <= 86400)])
+    error_message = "Each record ttl must be 1 (automatic) or between 60 and 86400."
+  }
 }

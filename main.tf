@@ -1,7 +1,11 @@
-# Primary upstream call or primary resource is named `this`.
-# Gate every resource on var.create (count = var.create ? 1 : 0).
+resource "cloudflare_dns_record" "this" {
+  for_each = var.create ? var.records : {}
 
-locals {
-  # Merge onto every taggable resource, with var.tags applied last.
-  tags = merge(var.context.extra_tags, var.tags)
+  zone_id = var.zone_id
+  name    = trimsuffix(each.value.name, ".")
+  type    = each.value.type
+  content = trimsuffix(each.value.content, ".")
+  ttl     = each.value.ttl
+  proxied = each.value.proxied
+  comment = each.value.comment
 }
