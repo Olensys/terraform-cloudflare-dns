@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1
+
+### Fixes
+
+- render declared provider constraints and skip .terraform in trivy scans
+- declare required_version and providers in examples/minimal
+
 ## 1.0.0
 
 - Cloudflare DNS records from a `records` map with a single `cloudflare_dns_record` `for_each`.
