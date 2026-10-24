@@ -15,7 +15,7 @@ Creates Cloudflare DNS records from a map keyed by a stable caller-chosen key. I
 
 ```hcl
 module "this" {
-  source = "git::https://github.com/Olensys/terraform-cloudflare-dns.git?ref=v1.0.0"
+  source = "git::https://github.com/Olensys/terraform-cloudflare-dns.git?ref=v1.0.1"
 
   context = {
     organization = "olensys"
