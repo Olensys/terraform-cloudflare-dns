@@ -37,6 +37,8 @@ module "this" {
 
 The `dns_records` output of `terraform-aws-ses-domain` is accepted as-is by `records`. Record names from a module output are known only after that module's resources exist, so on a first deploy (and whenever the certificate or identity is replaced) apply the producing module first, then this one.
 
+The integration run (`tests/complete.tftest.hcl`) applies `examples/minimal`, which creates three records (CNAME, TXT, MX) under `TF_VAR_zone_domain` (default `tf-test.olensys.com`) in the zone `TF_VAR_zone_id`, then destroys them.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
