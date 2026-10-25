@@ -31,15 +31,16 @@ variable "zone_id" {
 variable "records" {
   description = <<-EOT
     DNS records keyed by a caller-chosen stable key. A trailing dot on name and content is stripped.
-    ttl is 1 (automatic) or 60-86400 seconds. MX/SRV priority is not supported in v1.
+    ttl is 1 (automatic) or 60-86400 seconds. MX and SRV records require priority (0-65535); other types must not set it.
   EOT
   type = map(object({
-    name    = string
-    type    = string
-    content = string
-    ttl     = optional(number, 300)
-    proxied = optional(bool, false)
-    comment = optional(string)
+    name     = string
+    type     = string
+    content  = string
+    ttl      = optional(number, 300)
+    proxied  = optional(bool, false)
+    comment  = optional(string)
+    priority = optional(number)
   }))
   default = {}
 
@@ -53,5 +54,17 @@ variable "records" {
   validation {
     condition     = alltrue([for r in values(var.records) : r.ttl == 1 || (r.ttl >= 60 && r.ttl <= 86400)])
     error_message = "Each record ttl must be 1 (automatic) or between 60 and 86400."
+  }
+
+  validation {
+    condition = alltrue([
+      for r in values(var.records) : contains(["MX", "SRV"], r.type) ? r.priority != null : r.priority == null
+    ])
+    error_message = "priority is required for MX and SRV records and must be omitted for every other type."
+  }
+
+  validation {
+    condition     = alltrue([for r in values(var.records) : coalesce(r.priority, 0) >= 0 && coalesce(r.priority, 0) <= 65535])
+    error_message = "priority must be between 0 and 65535."
   }
 }

@@ -101,3 +101,40 @@ run "test_ttl_validation" {
 
   expect_failures = [var.records]
 }
+
+run "test_mx_priority_passed" {
+  command = plan
+  variables {
+    records = {
+      mx = { name = "mail.example.com", type = "MX", content = "feedback-smtp.us-east-1.amazonses.com", priority = 10 }
+    }
+  }
+  assert {
+    condition     = cloudflare_dns_record.this["mx"].priority == 10
+    error_message = "MX priority must be passed to the record."
+  }
+}
+
+run "test_priority_required_for_mx" {
+  command = plan
+  variables {
+    records = { mx = { name = "mail.example.com", type = "MX", content = "feedback-smtp.us-east-1.amazonses.com" } }
+  }
+  expect_failures = [var.records]
+}
+
+run "test_priority_rejected_for_other_types" {
+  command = plan
+  variables {
+    records = { www = { name = "www.example.com", type = "CNAME", content = "example.com", priority = 10 } }
+  }
+  expect_failures = [var.records]
+}
+
+run "test_priority_range_validation" {
+  command = plan
+  variables {
+    records = { mx = { name = "mail.example.com", type = "MX", content = "mx.example.com", priority = 70000 } }
+  }
+  expect_failures = [var.records]
+}
