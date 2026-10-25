@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Olensys/terraform-cloudflare-dns/compare/v1.0.1...v1.1.0) (2026-10-25)
+
+
+### Features
+
+* MX and SRV record priority ([#1](https://github.com/Olensys/terraform-cloudflare-dns/issues/1)) ([3c6ed5f](https://github.com/Olensys/terraform-cloudflare-dns/commit/3c6ed5f6c5f82fb04f305ece25eec13460c91df5))
+
 ## 1.0.1
 
 ### Fixes
