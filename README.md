@@ -16,7 +16,7 @@ Creates Cloudflare DNS records from a map keyed by a stable caller-chosen key. I
 
 ```hcl
 module "this" {
-  source = "git::https://github.com/Olensys/terraform-cloudflare-dns.git?ref=v1.0.1"
+  source = "git::https://github.com/Olensys/terraform-cloudflare-dns.git?ref=v1.1.0"
 
   context = {
     organization = "olensys"
@@ -35,7 +35,7 @@ module "this" {
 }
 ```
 
-The `dns_records` output of `terraform-aws-ses-domain` is accepted as-is by `records`.
+The `dns_records` output of `terraform-aws-ses-domain` is accepted as-is by `records`. Record names from a module output are known only after that module's resources exist, so on a first deploy (and whenever the certificate or identity is replaced) apply the producing module first, then this one.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
