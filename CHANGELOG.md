@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/Olensys/terraform-cloudflare-dns/compare/v1.1.0...v1.1.1) (2026-10-25)
+
+
+### Bug Fixes
+
+* **examples:** self-contained records under the test subdomain and an integration workflow ([#4](https://github.com/Olensys/terraform-cloudflare-dns/issues/4)) ([ba78427](https://github.com/Olensys/terraform-cloudflare-dns/commit/ba78427e1b8e183462efe8ce3f2e0ac33901f33c))
+
 ## [1.1.0](https://github.com/Olensys/terraform-cloudflare-dns/compare/v1.0.1...v1.1.0) (2026-10-25)
 
 
