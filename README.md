@@ -8,7 +8,7 @@ Creates Cloudflare DNS records from a map keyed by a stable caller-chosen key. I
 - `proxied` defaults to `false`.
 - A trailing `.` is stripped from record `name` and `content`.
 - `type` must be one of `A`, `AAAA`, `CNAME`, `TXT`, `MX`, `NS`, `SRV`, `CAA`, `PTR`.
-- `priority` (MX/SRV) is not supported in v1.
+- MX and SRV records require `priority` (0-65535); every other type must omit it.
 - Records are not taggable, so there are no `tags`/`name` inputs and no `arn`/`self_link` output; `id` and `name` outputs return the zone ID.
 
 ## Usage
@@ -29,9 +29,12 @@ module "this" {
   records = {
     www = { name = "www.example.com", type = "CNAME", content = "target.example.net" }
     spf = { name = "example.com", type = "TXT", content = "v=spf1 -all", comment = "spf" }
+    mx  = { name = "mail.example.com", type = "MX", content = "feedback-smtp.us-east-1.amazonses.com", priority = 10 }
   }
 }
 ```
+
+The `dns_records` output of `terraform-aws-ses-domain` is accepted as-is by `records`.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -64,7 +67,7 @@ No modules.
 | <a name="input_context"></a> [context](#input\_context) | Deployment context used for naming, tagging and environment-dependent defaults. | <pre>object({<br/>    organization = string<br/>    environment  = string<br/>    application  = string<br/>    component    = optional(string)<br/>    owner        = string<br/>    cost_center  = string<br/>    extra_tags   = optional(map(string), {})<br/>  })</pre> | n/a | yes |
 | <a name="input_zone_id"></a> [zone\_id](#input\_zone\_id) | Cloudflare zone ID the records are created in. | `string` | n/a | yes |
 | <a name="input_create"></a> [create](#input\_create) | Whether to create any resources. Set false to create nothing. | `bool` | `true` | no |
-| <a name="input_records"></a> [records](#input\_records) | DNS records keyed by a caller-chosen stable key. A trailing dot on name and content is stripped.<br/>ttl is 1 (automatic) or 60-86400 seconds. MX/SRV priority is not supported in v1. | <pre>map(object({<br/>    name    = string<br/>    type    = string<br/>    content = string<br/>    ttl     = optional(number, 300)<br/>    proxied = optional(bool, false)<br/>    comment = optional(string)<br/>  }))</pre> | `{}` | no |
+| <a name="input_records"></a> [records](#input\_records) | DNS records keyed by a caller-chosen stable key. A trailing dot on name and content is stripped.<br/>ttl is 1 (automatic) or 60-86400 seconds. MX and SRV records require priority (0-65535); other types must not set it. | <pre>map(object({<br/>    name     = string<br/>    type     = string<br/>    content  = string<br/>    ttl      = optional(number, 300)<br/>    proxied  = optional(bool, false)<br/>    comment  = optional(string)<br/>    priority = optional(number)<br/>  }))</pre> | `{}` | no |
 
 ## Outputs
 
