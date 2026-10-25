@@ -7,6 +7,10 @@
 
 * MX and SRV record priority ([#1](https://github.com/Olensys/terraform-cloudflare-dns/issues/1)) ([3c6ed5f](https://github.com/Olensys/terraform-cloudflare-dns/commit/3c6ed5f6c5f82fb04f305ece25eec13460c91df5))
 
+### Behaviour changes
+
+MX and SRV records now require `priority`; records of other types must not set it. Inputs that already pass MX/SRV without a priority fail validation until a priority is added.
+
 ## 1.0.1
 
 ### Fixes
