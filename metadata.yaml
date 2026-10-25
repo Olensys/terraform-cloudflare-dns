@@ -1,7 +1,7 @@
 name: terraform-cloudflare-dns
 cloud: common          # aws | google | common
 tier: capability          # primitive | capability | blueprint
-maturity: experimental    # experimental | stable | deprecated
+maturity: stable          # experimental | stable | deprecated
 description: Cloudflare DNS records from a map; used for ACM and SES validation and CNAMEs
 owners: [platform]
 upstream: null
