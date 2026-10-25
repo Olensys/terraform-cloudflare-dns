@@ -64,7 +64,7 @@ variable "records" {
   }
 
   validation {
-    condition     = alltrue([for r in values(var.records) : r.priority == null || (r.priority >= 0 && r.priority <= 65535)])
+    condition     = alltrue([for r in values(var.records) : coalesce(r.priority, 0) >= 0 && coalesce(r.priority, 0) <= 65535])
     error_message = "priority must be between 0 and 65535."
   }
 }

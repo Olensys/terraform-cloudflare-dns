@@ -9,6 +9,7 @@ Creates Cloudflare DNS records from a map keyed by a stable caller-chosen key. I
 - A trailing `.` is stripped from record `name` and `content`.
 - `type` must be one of `A`, `AAAA`, `CNAME`, `TXT`, `MX`, `NS`, `SRV`, `CAA`, `PTR`.
 - MX and SRV records require `priority` (0-65535); every other type must omit it.
+- SRV records also need weight, port and target, which this module does not expose yet; only MX priority is usable today.
 - Records are not taggable, so there are no `tags`/`name` inputs and no `arn`/`self_link` output; `id` and `name` outputs return the zone ID.
 
 ## Usage
